@@ -20,3 +20,5 @@ echo "boops * $PASSWD *" >> /etc/ppp/chap-secrets
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 sysctl -p
 iptables -t nat -A POSTROUTING -s 192.168.10.2 -o $INTERFACE_NAME -j MASQUERADE
+
+echo "The username and password are boops and $PASSWD"
