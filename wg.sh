@@ -15,7 +15,7 @@ wg genkey > priv.key
 wg pubkey < priv.key > pub.key
 echo "Your this servers public key is: $(cat pub.key)"
 read -n 1 -s
-PORT="$(shuf -i 49152-65535 -n 1)"
+port=`shuf -i 49152-65535 -n 1`
 wg set wg0 listen-port $PORT
 echo "Your servers random port is $(PORT)"
 read -n 1 -s
