@@ -2,6 +2,9 @@
 
 # This was written on/for Ubuntu 19.10
 
+# Gen random port
+PORT=`shuf -i 49152-65535 -n 1`
+
 # Install Wireguard PPA
 yes | add-apt-repository ppa:wireguard/wireguard
 apt install wireguard -y
@@ -15,7 +18,6 @@ wg genkey > priv.key
 wg pubkey < priv.key > pub.key
 echo "Your this servers public key is: $(cat pub.key)"
 read -n 1 -s
-PORT=`shuf -i 49152-65535 -n 1`
 wg set wg0 listen-port $PORT
 echo "Your servers random port is $(PORT)"
 read -n 1 -s
