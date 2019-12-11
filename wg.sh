@@ -30,5 +30,13 @@ sysctl -w net.ipv4.ip_forward=1
 iptables -A FORWARD -i wg0 -j ACCEPT
 iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE
 
+# Enable UPnP
+apt install miniupnpd -y
+iptables -t nat -N MINIUPNPD
+iptables -t nat -A PREROUTING -i ens3 MINIUPNPD
+iptables -t filter -N MINIUPNPD
+iptables -t filter -A FORWARD -i ens3 ! -o ens3 -j MINIUPNPD
+echo "To start upnp: miniupnpd -d -1 -i ens3 -a wg0 -A \"allow 1024-65535 192.168.24.0/24 1024-65535\""
+
 # Finally start Wireguard
 ip link set up dev wg0
