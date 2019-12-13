@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # This was written on/for Ubuntu 19.10
+PORT=`shuf -i 49152-65535 -n 1`
 
 # Install Wireguard PPA
 yes | add-apt-repository ppa:wireguard/wireguard
@@ -15,7 +16,6 @@ wg genkey > priv.key
 wg pubkey < priv.key > pub.key
 echo "Your this servers public key is: $(cat pub.key)"
 read -n 1 -s
-PORT=`shuf -i 49152-65535 -n 1`
 wg set wg0 listen-port $PORT
 echo "Your servers random port is $PORT"
 read -n 1 -s
@@ -33,7 +33,7 @@ iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE
 # Enable UPnP
 apt install miniupnpd -y
 iptables -t nat -N MINIUPNPD
-iptables -t nat -A PREROUTING -i ens3 MINIUPNPD
+iptables -t nat -A PREROUTING -i ens3 -j MINIUPNPD
 iptables -t filter -N MINIUPNPD
 iptables -t filter -A FORWARD -i ens3 ! -o ens3 -j MINIUPNPD
 echo "To start upnp: miniupnpd -d -1 -i ens3 -a wg0 -A \"allow 1024-65535 192.168.24.0/24 1024-65535\""
